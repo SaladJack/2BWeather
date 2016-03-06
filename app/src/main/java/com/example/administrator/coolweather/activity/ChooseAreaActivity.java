@@ -3,6 +3,7 @@ package com.example.administrator.coolweather.activity;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
@@ -15,6 +16,9 @@ import com.example.administrator.coolweather.model.City;
 import com.example.administrator.coolweather.model.CoolWeatherDB;
 import com.example.administrator.coolweather.model.County;
 import com.example.administrator.coolweather.model.Province;
+import com.example.administrator.coolweather.util.HttpCallbackListener;
+import com.example.administrator.coolweather.util.HttpUtil;
+import com.example.administrator.coolweather.util.Utility;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,14 +76,56 @@ public class ChooseAreaActivity extends Activity {
     }
 
     private void queryProvinces() {
-
+        provinceList = coolWeatherDB.loadProvinces();
+        if (provinceList.size()>0){
+            datalist.clear();
+            for (Province province : provinceList){
+                datalist.add(province.getProvinceName());
+            }
+            adapter.notifyDataSetChanged();
+            listView.setSelection(0);
+            titleText.setText("中国");
+            currentLevel = LEVEL_PROVINCE;
+        }else{
+            queryFromServer(null,"province");
+        }
     }
+
+
 
 
     private void queryCities() {
     }
 
     private void queryCounties() {
+    }
+
+    private void queryFromServer(final String code, final String type) {
+        String address;
+        if(!TextUtils.isEmpty(code)){
+            address = "http://www.weather.com.cn/data/list3/city"+code+".xml";
+        }else {
+            address = "http://www.weather.com.cn/data/list3/city.xml";
+        }
+        showProgressDialog();
+        HttpUtil.sendHttpRequest(address, new HttpCallbackListener() {
+            @Override
+            public void onFinish(String response) {
+                boolean result = false;
+                if ("province".equals(type)){
+                    result = Utility.handleCitiesResponse(coolWeatherDB,response,selectedProvince.getId());
+                }
+            }
+
+            @Override
+            public void onError(Exception e) {
+
+            }
+        });
+    }
+
+    private void showProgressDialog() {
+
     }
 
 }
