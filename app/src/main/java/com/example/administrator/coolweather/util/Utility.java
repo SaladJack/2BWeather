@@ -3,7 +3,7 @@ package com.example.administrator.coolweather.util;
 import android.text.TextUtils;
 
 import com.example.administrator.coolweather.model.City;
-import com.example.administrator.coolweather.model.CoolWeatherDB;
+import com.example.administrator.coolweather.db.CoolWeatherDB;
 import com.example.administrator.coolweather.model.County;
 import com.example.administrator.coolweather.model.Province;
 
@@ -64,5 +64,4 @@ public class Utility {
         }
         return false;
     }
-}
 }

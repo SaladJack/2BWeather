@@ -1,11 +1,13 @@
-package com.example.administrator.coolweather.model;
+package com.example.administrator.coolweather.db;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.example.administrator.coolweather.db.CoolWeatherOpenHelper;
+import com.example.administrator.coolweather.model.City;
+import com.example.administrator.coolweather.model.County;
+import com.example.administrator.coolweather.model.Province;
 
 import java.util.ArrayList;
 import java.util.List;

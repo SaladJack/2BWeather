@@ -10,10 +10,11 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.administrator.coolweather.R;
 import com.example.administrator.coolweather.model.City;
-import com.example.administrator.coolweather.model.CoolWeatherDB;
+import com.example.administrator.coolweather.db.CoolWeatherDB;
 import com.example.administrator.coolweather.model.County;
 import com.example.administrator.coolweather.model.Province;
 import com.example.administrator.coolweather.util.HttpCallbackListener;
@@ -95,9 +96,35 @@ public class ChooseAreaActivity extends Activity {
 
 
     private void queryCities() {
+        cityList = coolWeatherDB.loadCities(selectedProvince.getId());
+        if (cityList.size()>0){
+            datalist.clear();
+            for (City city : cityList){
+                datalist.add(city.getCityName());
+            }
+            adapter.notifyDataSetChanged();
+            listView.setSelection(0);
+            titleText.setText(selectedProvince.getProvinceName());
+            currentLevel = LEVEL_CITY;
+        }else {
+            queryFromServer(selectedProvince.getProvinceCode(),"city");
+        }
     }
 
     private void queryCounties() {
+        countyList = coolWeatherDB.loadCounties(selectedCity.getId());
+        if (countyList.size()>0){
+            datalist.clear();
+            for (County county : countyList){
+                datalist.add(county.getCountyName());
+            }
+            adapter.notifyDataSetChanged();
+            listView.setSelection(0);
+            titleText.setText(selectedCity.getCityName());
+            currentLevel = LEVEL_COUNTY;
+        }else{
+            queryFromServer(selectedCity.getCityCode(),"county");
+        }
     }
 
     private void queryFromServer(final String code, final String type) {
@@ -113,19 +140,65 @@ public class ChooseAreaActivity extends Activity {
             public void onFinish(String response) {
                 boolean result = false;
                 if ("province".equals(type)){
+                    result = Utility.handleProvincesResponse(coolWeatherDB, response);
+                } else if ("city".equals(type)){
                     result = Utility.handleCitiesResponse(coolWeatherDB,response,selectedProvince.getId());
+                }  else if ("county".equals(type)){
+                    result = Utility.handleCountiesResponse(coolWeatherDB,response,selectedCity.getId());
+                }
+                if(result){
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            closeProgressDialog();
+                            if ("province".equals(type)){
+                                queryProvinces();
+                            }else if ("city".equals(type)){
+                                queryCities();
+                            }  else if ("county".equals(type)){
+                                queryCounties();
+                            }
+                        }
+                    });
                 }
             }
 
             @Override
             public void onError(Exception e) {
+               runOnUiThread(new Runnable() {
+                   @Override
+                   public void run() {
+                       closeProgressDialog();
+                       Toast.makeText(ChooseAreaActivity.this,"加载失败", Toast.LENGTH_SHORT).show();
+                   }
+               });
 
             }
         });
     }
 
-    private void showProgressDialog() {
 
+    private void showProgressDialog() {
+        if (progressDialog == null){
+            progressDialog = new ProgressDialog(this);
+            progressDialog.setMessage("正在加载...");
+            progressDialog.setCanceledOnTouchOutside(false);
+        }
+    }
+    private void closeProgressDialog() {
+        if (progressDialog!=null){
+            progressDialog.dismiss();
+        }
     }
 
+    @Override
+    public void onBackPressed() {
+        if (currentLevel == LEVEL_COUNTY){
+            queryCities();
+        }else if (currentLevel == LEVEL_CITY){
+            queryProvinces();
+        }else{
+            finish();
+        }
+    }
 }
