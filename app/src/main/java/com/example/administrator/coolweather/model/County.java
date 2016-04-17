@@ -4,40 +4,35 @@ package com.example.administrator.coolweather.model;
  * Created by Administrator on 2016/3/1.
  */
 public class County {
-    private int id;
-    private String countyName;
-    private String countyCode;
-    private int cityId;
+    //区名
+    private String county_name;
+    //区id
+    private String county_id;
+    //所属城市id
+    private String city_id;
 
-    public int getId() {
-        return id;
+    public String getCounty_name() {
+        return county_name;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setCounty_name(String county_name) {
+        this.county_name = county_name;
     }
 
-    public String getCountyName() {
-        return countyName;
+    public String getCounty_id() {
+        return county_id;
     }
 
-    public void setCountyName(String countyName) {
-        this.countyName = countyName;
+    public void setCounty_id(String county_id) {
+        this.county_id = county_id;
     }
 
-    public String getCountyCode() {
-        return countyCode;
+    public String getCity_id() {
+        return city_id;
     }
 
-    public void setCountyCode(String countyCode) {
-        this.countyCode = countyCode;
+    public void setCity_id(String city_id) {
+        this.city_id = city_id;
     }
 
-    public int getCityId() {
-        return cityId;
-    }
-
-    public void setCityId(int cityId) {
-        this.cityId = cityId;
-    }
 }

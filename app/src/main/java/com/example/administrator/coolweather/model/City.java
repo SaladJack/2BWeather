@@ -4,40 +4,35 @@ package com.example.administrator.coolweather.model;
  * Created by Administrator on 2016/3/1.
  */
 public class City {
-    private int id;
-    private String cityName;
-    private String cityCode;
-    private int provinceId;
+    //城市名
+    private String city_name;
+    //城市id
+    private String city_id;
+    //所属省份id
+    private String province_id;
 
-    public int getId() {
-        return id;
+    public String getCity_name() {
+        return city_name;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setCity_name(String city_name) {
+        this.city_name = city_name;
     }
 
-    public String getCityName() {
-        return cityName;
+    public String getCity_id() {
+        return city_id;
     }
 
-    public void setCityName(String cityName) {
-        this.cityName = cityName;
+    public void setCity_id(String city_id) {
+        this.city_id = city_id;
     }
 
-    public String getCityCode() {
-        return cityCode;
+    public String getProvince_id() {
+        return province_id;
     }
 
-    public void setCityCode(String cityCode) {
-        this.cityCode = cityCode;
+    public void setProvince_id(String province_id) {
+        this.province_id = province_id;
     }
 
-    public int getProvinceId() {
-        return provinceId;
-    }
-
-    public void setProvinceId(int provinceId) {
-        this.provinceId = provinceId;
-    }
 }
