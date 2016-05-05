@@ -1,2 +1,2 @@
-# 2BWeather
+# MyWeatherApp
 APP-Weather Forecast 
