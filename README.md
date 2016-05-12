@@ -1,2 +1,2 @@
-# CoolWeather
+# MyWeatherApp
 APP-Weather Forecast 
